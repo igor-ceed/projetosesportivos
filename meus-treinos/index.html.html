@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Treinos Esportivos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-full flex flex-col antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="goToHome()">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                    <i class="fa-solid fa-stopwatch text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">CoachHub</h1>
+                    <p class="text-xs text-slate-400">Painel de Treinos Escolares</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openCoachModal()" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 text-xs sm:text-sm font-medium px-3 py-2 rounded-lg transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span class="hidden sm:inline">Planejamento do Treinador</span>
+                    <span class="sm:hidden">Estratégia</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
+        
+        <!-- Breadcrumb / Navigation Bar -->
+        <nav id="breadcrumb-container" class="flex items-center text-sm text-slate-500 mb-6 space-x-2 hidden">
+            <button onclick="goToHome()" class="hover:text-emerald-600 font-medium flex items-center space-x-1">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </button>
+            <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            <span id="breadcrumb-sport" class="font-semibold text-slate-700">Modalidade</span>
+            <span id="breadcrumb-sub-container" class="hidden items-center space-x-2">
+                <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                <span id="breadcrumb-sub" class="font-semibold text-emerald-600">Categoria</span>
+            </span>
+        </nav>
+
+        <!-- VIEW 1: HOME (Seleção de Modalidades) -->
+        <div id="view-home" class="flex-1 flex flex-col justify-center animate-fade-in">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Gestão de Equipes Escolares</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Escolha a Modalidade</h2>
+                <p class="text-slate-600 mt-2 text-sm sm:text-base">Selecione uma pasta para ver os treinos programados, separados por dias da semana ou fundamentos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full">
+                
+                <!-- Card Atletismo -->
+                <div onclick="selectSport('atletismo')" class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl border border-slate-200/80 hover:border-emerald-500 transition-all duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full -mr-10 -mt-10 group-hover:scale-125 transition-transform duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300 shadow-sm">
+                            <i class="fa-solid fa-person-running"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">Atletismo</h3>
+                        <p class="text-slate-500 text-sm mt-1">Foco híbrido: 1h presencial + Treino autônomo na quarta-feira.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-slate-700 group-hover:text-emerald-600 relative z-10">
+                        <span>Acessar Pastas</span>
+                        <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card Futsal -->
+                <div onclick="selectSport('futsal')" class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl border border-slate-200/80 hover:border-emerald-500 transition-all duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 group-hover:scale-125 transition-transform duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300 shadow-sm">
+                            <i class="fa-solid fa-futbol"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">Futsal</h3>
+                        <p class="text-slate-500 text-sm mt-1">Fundamentos técnicos, controle de bola, passes e tática de jogo.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-slate-700 group-hover:text-emerald-600 relative z-10">
+                        <span>Acessar Pastas</span>
+                        <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card Vôlei -->
+                <div onclick="selectSport('volei')" class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl border border-slate-200/80 hover:border-emerald-500 transition-all duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full -mr-10 -mt-10 group-hover:scale-125 transition-transform duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300 shadow-sm">
+                            <i class="fa-solid fa-volleyball"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">Vôlei</h3>
+                        <p class="text-slate-500 text-sm mt-1">Manchete, toque, saque, posicionamento e rotações em quadra.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-slate-700 group-hover:text-emerald-600 relative z-10">
+                        <span>Acessar Pastas</span>
+                        <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- VIEW 2: CATEGORY SELECTOR (Dias da Semana vs Fundamentos) -->
+        <div id="view-categories" class="flex-1 flex flex-col hidden animate-fade-in">
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <button onclick="goToHome()" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-3 py-1.5 rounded-lg transition-all mb-2 inline-flex items-center space-x-1">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Voltar às Modalidades</span>
+                    </button>
+                    <h2 id="sport-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900">Modalidade</h2>
+                    <p class="text-slate-600 text-sm">Como você deseja visualizar o planejamento dos treinos?</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto w-full my-auto">
+                <!-- Pasta: Dias da Semana -->
+                <div onclick="selectViewMode('days')" class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md border border-slate-200 hover:border-emerald-500 transition-all cursor-pointer flex items-center space-x-6">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl flex-shrink-0">
+                        <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Dias da Semana</h3>
+                        <p class="text-slate-500 text-sm mt-1">Organizado cronologicamente (Segunda, Quarta, Sexta, etc.). Ideal para ver a rotina.</p>
+                    </div>
+                </div>
+
+                <!-- Pasta: Fundamentos / Focos -->
+                <div onclick="selectViewMode('fundamentals')" class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md border border-slate-200 hover:border-emerald-500 transition-all cursor-pointer flex items-center space-x-6">
+                    <div class="w-16 h-16 rounded-2xl bg-violet-100 text-violet-600 flex items-center justify-center text-3xl flex-shrink-0">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Fundamentos / Focos</h3>
+                        <p class="text-slate-500 text-sm mt-1">Dividido por habilidades específicas (Técnica, Aquecimento, Pliometria, Tática).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: ITEMS LIST (Lista de treinos da pasta escolhida) -->
+        <div id="view-items" class="flex-1 flex flex-col hidden animate-fade-in">
+            <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <button onclick="goBackToCategories()" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-3 py-1.5 rounded-lg transition-all mb-2 inline-flex items-center space-x-1">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Trocar Visão</span>
+                    </button>
+                    <h2 id="folder-title" class="text-2xl font-extrabold text-slate-900">Treinos Disponíveis</h2>
+                    <p id="folder-subtitle" class="text-slate-600 text-sm">Selecione um treino para ver os detalhes passo a passo.</p>
+                </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div id="workouts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Detalhes do Treino -->
+    <div id="workout-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+            <!-- Modal Header -->
+            <div class="bg-slate-900 text-white p-6 sticky top-0 z-10 flex items-center justify-between">
+                <div>
+                    <span id="modal-badge" class="bg-emerald-500 text-white text-xs font-semibold px-2.5 py-1 rounded-md uppercase tracking-wider">Presencial</span>
+                    <h3 id="modal-title" class="text-xl font-bold mt-2">Nome do Treino</h3>
+                </div>
+                <button onclick="closeWorkoutModal()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <!-- Modal Content -->
+            <div class="p-6 space-y-6">
+                <!-- Objetivo -->
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                    <h4 class="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center space-x-1.5 mb-1">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <span>Objetivo da Sessão</span>
+                    </h4>
+                    <p id="modal-objective" class="text-sm text-emerald-900 font-medium">Objetivo aqui...</p>
+                </div>
+
+                <!-- Instruções Especiais p/ Aluno Sozinho -->
+                <div id="modal-autonomous-box" class="bg-amber-50 border border-amber-200 rounded-xl p-4 hidden">
+                    <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center space-x-1.5 mb-1">
+                        <i class="fa-solid fa-user-clock"></i>
+                        <span>Instruções para Treino Autônomo (Quarta-feira)</span>
+                    </h4>
+                    <p id="modal-autonomous-text" class="text-sm text-amber-900">Orientações...</p>
+                </div>
+
+                <!-- Passo a Passo -->
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-list-check text-emerald-600"></i>
+                        <span>Sequência de Exercícios Passo a Passo</span>
+                    </h4>
+                    <div id="modal-steps" class="space-y-3">
+                        <!-- Inserido via JS -->
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Footer -->
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                <button onclick="closeWorkoutModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-5 py-2 rounded-xl transition-all">
+                    Fechar Detalhes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Planejamento do Treinador -->
+    <div id="coach-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+            <!-- Modal Header -->
+            <div class="bg-emerald-600 text-white p-6 sticky top-0 z-10 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-700 flex items-center justify-center text-white">
+                        <i class="fa-solid fa-chalkboard-user text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">Planejamento Estratégico do Treinador</h3>
+                        <p class="text-xs text-emerald-100">Como gerenciar Atletismo (1h semanal) + Futsal</p>
+                    </div>
+                </div>
+                <button onclick="closeCoachModal()" class="w-9 h-9 rounded-full bg-emerald-700 hover:bg-emerald-800 flex items-center justify-center text-emerald-100 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-6 space-y-6 text-slate-700">
+                <!-- Desafio -->
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <h4 class="font-bold text-slate-900 text-sm mb-1 flex items-center space-x-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+                        <span>O Desafio & O Contexto</span>
+                    </h4>
+                    <p class="text-sm text-slate-600">
+                        Você tem apenas <strong>1h semanal</strong> de contato direto com o atletismo e precisa treinar equipes de outras modalidades (como o futsal) nos outros dias. O grupo de atletismo é <strong>misto e iniciante</strong>, necessitando de análise de aptidões.
+                    </p>
+                </div>
+
+                <!-- Solução Híbrida -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider bg-emerald-100 px-2 py-0.5 rounded">Segunda-feira</span>
+                        <h5 class="font-bold text-slate-900 mt-2 mb-1">Treino Presencial (1h Direta)</h5>
+                        <p class="text-xs text-slate-600">Foco total em correção postural, educativos de corrida (drills), testes iniciais de velocidade e pliometria leve com supervisão atenta.</p>
+                    </div>
+                    <div class="bg-amber-50/60 border border-amber-200 rounded-xl p-4">
+                        <span class="text-xs font-bold text-amber-700 uppercase tracking-wider bg-amber-100 px-2 py-0.5 rounded">Quarta-feira</span>
+                        <h5 class="font-bold text-slate-900 mt-2 mb-1">Treino Autônomo (Próximo à Quadra)</h5>
+                        <p class="text-xs text-slate-600">Enquanto você comanda o futsal, o atletismo treina perto com fichas pré-estabelecidas (Core, estabilização e mobilidade). Um aluno líder controla o tempo.</p>
+                    </div>
+                </div>
+
+                <!-- Dicas de Ouro -->
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                        <span>Diretrizes para o Professor</span>
+                    </h4>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                            <span><strong>Nomeie um Líder:</strong> Escolha um aluno responsável para conduzir a chamada e cronometrar as séries de quarta-feira.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                            <span><strong>Padronize as Pastas:</strong> Use esta webapp no celular dos alunos para que eles consultem o treino exato sem precisar te interromper no futsal.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                            <span><strong>Acompanhamento Inicial:</strong> Aproveite os primeiros 5 minutos de segunda para checar o feedback do treino autônomo da quarta anterior.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                <button onclick="closeCoachModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-5 py-2 rounded-xl transition-all">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Banco de Dados Completo de Treinos para Escolas
+        const workoutsData = {
+            atletismo: {
+                title: "Atletismo",
+                days: [
+                    {
+                        id: "atl-seg",
+                        title: "Segunda-feira: Presencial (1h)",
+                        badge: "Presencial com Professor",
+                        objective: "Aprimorar mecânica de passada, educativos (drills) e estímulos curtos de velocidade.",
+                        autonomous: null,
+                        steps: [
+                            "00:00 - 00:10 | Aquecimento Dinâmico e mobilidade articular de quadris e tornozelos.",
+                            "00:10 - 00:25 | Educativos de Corrida (Drills): A-Skip (High knees), B-Skip, Ankle Kicks e passadas ritmadas.",
+                            "00:25 - 00:45 | Tiros de Velocidade: 5 a 6 tiros de 30m a 50m com foco em saída explosiva e postura ereta (descanso completo entre os tiros).",
+                            "00:45 - 00:55 | Pliometria Básica: Saltos verticais e horizontais em bloco (3 séries de 6 saltos).",
+                            "00:55 - 01:00 | Volta à calma, alongamento leve e briefing para quarta-feira."
+                        ]
+                    },
+                    {
+                        id: "atl-qua",
+                        title: "Quarta-feira: Treino Autônomo",
+                        badge: "Próximo à Quadra (Sozinhos)",
+                        objective: "Trabalhar estabilização de core, força abdominal e resistência sem exigir supervisão direta.",
+                        autonomous: "O líder do grupo assume o cronômetro. Executar na área verde ou lateral próxima à quadra de futsal.",
+                        steps: [
+                            "00:00 - 00:10 | Trote leve contínuo ao redor do espaço (5 min) + Mobilidade articular livre.",
+                            "00:10 - 00:25 | Bloco de Core & Estabilidade (3 séries): Prancha abdominal (45s), Prancha lateral cada lado (30s), Abdominal infra (15 repetições).",
+                            "00:25 - 00:40 | Força de Membros Inferiores: Agachamento livre sem peso (3x15), Afundo alternado (3x10 por perna) e Saltos simulando corda (3x45s).",
+                            "00:40 - 00:45 | Caminhada regenerativa e alongamentos finais em dupla."
+                        ]
+                    },
+                    {
+                        id: "atl-sex",
+                        title: "Sexta-feira: Avaliação & Jogos de Pista",
+                        badge: "Autônomo / Leve",
+                        objective: "Consolidar a coordenação motora através de circuitos de agilidade e brincadeiras de pista.",
+                        autonomous: "Montar circuito com cones (se disponíveis) ou marcação no chão.",
+                        steps: [
+                            "00:00 - 00:10 | Aquecimento articular e trote progressivo.",
+                            "00:10 - 00:30 | Circuito de Agilidade: Zigue-zague entre cones, saltos laterais rápidos e corrida de costas controlada (4 passagens).",
+                            "00:30 - 00:40 | Corrida de revezamento lúdica em equipes (bastão improvisado).",
+                            "00:40 - 00:45 | Alongamento final e organização do material."
+                        ]
+                    }
+                ],
+                fundamentals: [
+                    {
+                        id: "atl-func-aquec",
+                        title: "Aquecimento & Educativos (Drills)",
+                        badge: "Fundamento Base",
+                        objective: "Preparar o sistema neuromuscular e refinar a técnica da passada para iniciantes.",
+                        autonomous: "Pode ser executado autonomamente antes de qualquer atividade física.",
+                        steps: [
+                            "Trote leve de 3 minutos para elevar a temperatura corporal.",
+                            "Elevação de joelhos (High Knees / A-Skip) focando na pisada com a parte frontal do pé.",
+                            "Calcanhar nos glúteos (Ankle Kicks) com tronco reto.",
+                            "Passadas largas com ênfase na extensão completa do quadril."
+                        ]
+                    },
+                    {
+                        id: "atl-func-vel",
+                        title: "Velocidade & Explosão",
+                        badge: "Valência Física",
+                        objective: "Desenvolver a potência anaeróbica e tempo de reação em tiros curtos.",
+                        autonomous: "Respeitar rigorosamente o tempo de recuperação entre os tiros para não virar treino aeróbico.",
+                        steps: [
+                            "Posição de saída em pé ou com um apoio das mãos no chão.",
+                            "Aceleração progressiva nos primeiros 10 metros, mantendo velocidade máxima até a marca de 40 metros.",
+                            "Caminhada lenta de retorno ao ponto de partida (Descanso de 1 a 2 minutos entre cada tiro)."
+                        ]
+                    },
+                    {
+                        id: "atl-func-core",
+                        title: "Core & Estabilidade",
+                        badge: "Força e Postura",
+                        objective: "Fortalecer a região abdominal e lombar, essencial para evitar lesões na corrida.",
+                        autonomous: "Executar em colchonetes ou grama limpa.",
+                        steps: [
+                            "Prancha ventral mantendo o corpo totalmente alinhado por 45 segundos.",
+                            "Prancha lateral com apoio no antebraço (30 segundos para cada lado).",
+                            "Ponte de glúteos com elevação pélvica (15 repetições controladas)."
+                        ]
+                    }
+                ]
+            },
+            futsal: {
+                title: "Futsal",
+                days: [
+                    {
+                        id: "fut-seg",
+                        title: "Segunda-feira: Passe e Recepção",
+                        badge: "Técnica Básica",
+                        objective: "Garantir precisão no passe rasteiro e domínio orientado com a sola e parte interna do pé.",
+                        autonomous: "Pode ser treinado em duplas contra uma parede firme.",
+                        steps: [
+                            "00:00 - 00:10 | Aquecimento com bola: condução livre pela quadra em velocidade variada.",
+                            "00:10 - 00:25 | Trabalho em duplas: Passes curtos e médios alternando pé direito e esquerdo, focando no domínio orientado.",
+                            "00:25 - 00:45 | Jogo reduzido 3x3 em quadra diminuta (foco em toque rápido de primeira ou no máximo dois toques).",
+                            "00:45 - 00:50 | Alongamento e feedback coletivo."
+                        ]
+                    },
+                    {
+                        id: "fut-qua",
+                        title: "Quarta-feira: Condução e Drible",
+                        badge: "Habilidade Individual",
+                        objective: "Melhorar a intimidade com a bola, mudança de direção e proteção de posse.",
+                        autonomous: "Utilizar cones ou garrafas pet para montar slalom.",
+                        steps: [
+                            "00:00 - 00:10 | Soltura e alongamento dinâmico com bola.",
+                            "00:10 - 00:30 | Slalom com cones: Condução em zigue-zague usando sola e parte externa (alternando direita e esquerda).",
+                            "00:30 - 00:45 | Exercício 1x1 na lateral: Atacante tenta superar o marcador usando finta simples.",
+                            "00:45 - 00:50 | Recolhimento de material e hidratação."
+                        ]
+                    }
+                ],
+                fundamentals: [
+                    {
+                        id: "fut-func-passe",
+                        title: "Passe & Recepção",
+                        badge: "Fundamento Coletivo",
+                        objective: "Agilizar a circulação da bola e manter a posse sob pressão.",
+                        autonomous: "Exercício de parede: 50 passes de primeira com a perna direita e 50 com a esquerda.",
+                        steps: [
+                            "Posicionar o pé de apoio ao lado da bola, apontado para o alvo.",
+                            "Golpear com a parte interna (chapa), mantendo o tornozelo firme.",
+                            "Recepcionar amortecendo a bola com a sola do pé."
+                        ]
+                    },
+                    {
+                        id: "fut-func-fin",
+                        title: "Finalização & Chute a Gol",
+                        badge: "Ataque",
+                        objective: "Aperfeiçoar o chute colocado e de forte intensidade para conversão em gols.",
+                        autonomous: "Chutes frontais ao gol após condução curta.",
+                        steps: [
+                            "Condução rápida de 10 metros em direção à área.",
+                            "Olhar para o canto do gol antes de armar o chute.",
+                            "Golpear com peito do pé (para potência) ou bico/chapa (para precisão)."
+                        ]
+                    }
+                ]
+            },
+            volei: {
+                title: "Vôlei",
+                days: [
+                    {
+                        id: "vol-seg",
+                        title: "Segunda-feira: Manchete e Toque",
+                        badge: "Fundamentos Básicos",
+                        objective: "Dominar a postura base, encaixe de braços na manchete e controle de toque acima da cabeça.",
+                        autonomous: "Pode ser praticado individualmente rebatendo contra a parede.",
+                        steps: [
+                            "00:00 - 00:10 | Mobilidade de ombros, punhos e joelhos em flexão constante.",
+                            "00:10 - 00:30 | Auto-toque e auto-manchete contínuos (tentar manter a bola no ar por sequências de 30 repetições).",
+                            "00:30 - 00:45 | Troca de passes em duplas: um lança fácil, outro devolve em manchete ajustando a postura dos joelhos.",
+                            "00:45 - 00:50 | Relaxamento e alongamento de membros superiores."
+                        ]
+                    },
+                    {
+                        id: "vol-qua",
+                        title: "Quarta-feira: Saque por Baixo e Posicionamento",
+                        badge: "Iniciação e Regras",
+                        objective: "Garantir consistência no saque e entendimento básico de revezamento em quadra.",
+                        autonomous: "Treino de alvo na parede com fita adesiva.",
+                        steps: [
+                            "00:00 - 00:10 | Aquecimento de braços e rotação articular.",
+                            "00:10 - 00:30 | Saque por baixo na parede ou por cima da rede adaptada, visando acertar áreas demarcadas.",
+                            "00:30 - 00:45 | Movimentação de rodízio em quadra (explicar posições 1, 6, 5, 4, 3, 2 de forma lúdica).",
+                            "00:45 - 00:50 | Encerramento e arrumação de bolas."
+                        ]
+                    }
+                ],
+                fundamentals: [
+                    {
+                        id: "vol-func-manchete",
+                        title: "Manchete & Postura",
+                        badge: "Defesa e Recepção",
+                        objective: "Criar uma plataforma estável com os braços para receber saques e ataques.",
+                        autonomous: "Rebatidas consecutivas contra a parede mantendo os braços estendidos e sem dobrar os cotovelos.",
+                        steps: [
+                            "Flexionar os joelhos mantendo o centro de gravidade baixo.",
+                            "Unir as mãos com os polegares paralelos apontados para baixo.",
+                            "Bater na bola com o antebraço (região do pulso até o meio do braço), impulsionando com as pernas."
+                        ]
+                    },
+                    {
+                        id: "vol-func-toque",
+                        title: "Toque Acima da Cabeça",
+                        badge: "Construção de Jogadas",
+                        objective: "Realizar o levantamento com precisão utilizando a ponta dos dedos.",
+                        autonomous: "Jogar a bola para cima e tocá-la repetidamente contra o teto ou parede.",
+                        steps: [
+                            "Formar um 'triângulo' com os polegares e indicadores acima da testa.",
+                            "Receber a bola com as polpas dos dedos (sem deixar a palma da mão encostar).",
+                            "Estender braços e pernas simultaneamente no momento do lançamento."
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Estado atual da navegação
+        let currentSport = null;
+        let currentViewMode = null;
+
+        // Funções de Navegação
+        function goToHome() {
+            currentSport = null;
+            currentViewMode = null;
+            document.getElementById('view-home').classList.remove('hidden');
+            document.getElementById('view-categories').classList.add('hidden');
+            document.getElementById('view-items').classList.add('hidden');
+            document.getElementById('breadcrumb-container').classList.add('hidden');
+        }
+
+        function selectSport(sportKey) {
+            currentSport = sportKey;
+            const sportObj = workoutsData[sportKey];
+            
+            document.getElementById('sport-title').innerText = sportObj.title;
+            document.getElementById('breadcrumb-sport').innerText = sportObj.title;
+            document.getElementById('breadcrumb-sub-container').classList.add('hidden');
+            document.getElementById('breadcrumb-container').classList.remove('hidden');
+
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-categories').classList.remove('hidden');
+            document.getElementById('view-items').classList.add('hidden');
+        }
+
+        function selectViewMode(mode) {
+            currentViewMode = mode;
+            const sportObj = workoutsData[currentSport];
+            
+            const modeTitle = mode === 'days' ? 'Dias da Semana' : 'Fundamentos / Focos';
+            document.getElementById('breadcrumb-sub').innerText = modeTitle;
+            document.getElementById('breadcrumb-sub-container').classList.remove('hidden');
+
+            document.getElementById('folder-title').innerText = `${sportObj.title} - ${modeTitle}`;
+            document.getElementById('folder-subtitle').innerText = mode === 'days' 
+                ? 'Selecione o dia correspondente para visualizar o treino.' 
+                : 'Selecione o fundamento que deseja treinar.';
+
+            renderWorkoutsList(mode);
+
+            document.getElementById('view-categories').classList.add('hidden');
+            document.getElementById('view-items').classList.remove('hidden');
+        }
+
+        function goBackToCategories() {
+            currentViewMode = null;
+            document.getElementById('breadcrumb-sub-container').classList.add('hidden');
+            document.getElementById('view-items').classList.add('hidden');
+            document.getElementById('view-categories').classList.remove('hidden');
+        }
+
+        function renderWorkoutsList(mode) {
+            const grid = document.getElementById('workouts-grid');
+            grid.innerHTML = '';
+
+            const list = workoutsData[currentSport][mode];
+
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-6 shadow-sm hover:shadow-md border border-slate-200 transition-all flex flex-col justify-between cursor-pointer group";
+                card.onclick = () => openWorkoutModal(item);
+
+                card.innerHTML = `
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-md uppercase tracking-wider">${item.badge}</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-3 group-hover:text-emerald-600 transition-colors">${item.title}</h3>
+                        <p class="text-slate-600 text-sm mt-2 line-clamp-2">${item.objective}</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-emerald-600">
+                        <span>Ver Passo a Passo</span>
+                        <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Funções dos Modais
+        function openWorkoutModal(item) {
+            document.getElementById('modal-badge').innerText = item.badge;
+            document.getElementById('modal-title').innerText = item.title;
+            document.getElementById('modal-objective').innerText = item.objective;
+
+            const autoBox = document.getElementById('modal-autonomous-box');
+            if (item.autonomous) {
+                document.getElementById('modal-autonomous-text').innerText = item.autonomous;
+                autoBox.classList.remove('hidden');
+            } else {
+                autoBox.classList.add('hidden');
+            }
+
+            const stepsContainer = document.getElementById('modal-steps');
+            stepsContainer.innerHTML = '';
+            item.steps.forEach((step, index) => {
+                const stepEl = document.createElement('div');
+                stepEl.className = "flex items-start space-x-3 bg-slate-50 p-3 rounded-xl border border-slate-100 text-sm text-slate-700";
+                stepEl.innerHTML = `
+                    <div class="w-6 h-6 rounded-full bg-emerald-500 text-white font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">${index + 1}</div>
+                    <div class="flex-1 leading-relaxed">${step}</div>
+                `;
+                stepsContainer.appendChild(stepEl);
+            });
+
+            document.getElementById('workout-modal').classList.remove('hidden');
+        }
+
+        function closeWorkoutModal() {
+            document.getElementById('workout-modal').classList.add('hidden');
+        }
+
+        function openCoachModal() {
+            document.getElementById('coach-modal').classList.remove('hidden');
+        }
+
+        function closeCoachModal() {
+            document.getElementById('coach-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
